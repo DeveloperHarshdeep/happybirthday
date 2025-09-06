@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Happy Birthday 🎉</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap');
+
+    body {
+      margin: 0;
+      padding: 0;
+      background: black;
+      overflow: hidden;
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-family: 'Poppins', sans-serif;
+      color: white;
+      position: relative;
+    }
+
+    /* Background Falling Letters */
+    .background {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 0;
+      display: flex;
+      pointer-events: none;
+    }
+
+    .column {
+      display: flex;
+      flex-direction: column;
+      font-size: clamp(10px, 2vw, 16px);
+      font-weight: bold;
+      animation: fall 8s linear infinite;
+    }
+
+    .char {
+      text-shadow: 0 0 5px currentColor, 0 0 10px currentColor, 0 0 15px currentColor;
+      line-height: 1;
+    }
+
+    @keyframes fall {
+      0% { transform: translateY(-100%); }
+      100% { transform: translateY(100vh); }
+    }
+
+    /* Countdown Timer */
+    #timer {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      font-size: clamp(2.5em, 8vw, 5em);
+      font-weight: bold;
+      color: #ff69b4;
+      text-shadow: 0 0 15px #ff1493, 0 0 30px #ff1493, 0 0 50px #ff69b4;
+      z-index: 10;
+      opacity: 0;
+      animation: numberPop 1s ease forwards;
+    }
+
+    @keyframes numberPop {
+      0% { opacity: 0; transform: translate(-50%, -50%) scale(0.3); }
+      50% { opacity: 1; transform: translate(-50%, -50%) scale(1.3); }
+      100% { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+    }
+
+    /* Proposal Container */
+    #proposalContainer {
+      display: none;
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background: rgba(0,0,0,0.85);
+      color: white;
+      padding: 30px 20px;
+      border-radius: 20px;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.5);
+      width: 90%;
+      max-width: 450px;
+      text-align: center;
+      z-index: 20;
+    }
+
+    #proposalContainer h1 {
+      font-size: clamp(1.5em, 5vw, 2em);
+      margin-bottom: 15px;
+      line-height: 1.3;
+    }
+
+    #proposalContainer p {
+      font-size: clamp(1em, 4vw, 1.2em);
+      margin-bottom: 20px;
+      line-height: 1.4;
+    }
+
+    #proposalGif {
+      width: 100%;
+      max-height: 200px;
+      object-fit: contain;
+      margin-bottom: 15px;
+      border-radius: 15px;
+    }
+
+    /* Show animation */
+    @keyframes popIn {
+      0% { opacity: 0; transform: translate(-50%, -50%) scale(0.5); }
+      60% { opacity: 1; transform: translate(-50%, -50%) scale(1.1); }
+      100% { transform: translate(-50%, -50%) scale(1); }
+    }
+
+    .show {
+      display: block !important;
+      animation: popIn 0.8s ease forwards;
+    }
+
+    /* Footer */
+    footer {
+      position: absolute;
+      bottom: 10px;
+      width: 100%;
+      text-align: center;
+      font-size: 0.9em;
+      color: #ff69b4;
+      text-shadow: 0 0 5px #ff1493, 0 0 10px #ff69b4;
+      z-index: 15;
+    }
+
+    footer a {
+      color: #ffb6c1;
+      text-decoration: none;
+      font-weight: 600;
+    }
+
+    footer a:hover {
+      text-decoration: underline;
+    }
+
+  </style>
+</head>
+<body>
+  <div class="background" id="container"></div>
+
+  <!-- Timer -->
+  <div id="timer">5</div>
+
+  <!-- Proposal Container -->
+  <div id="proposalContainer">
+<h1>🎉 Happy Birthday! 🎉</h1>
+  <img src="hb.gif" alt="Birthday GIF" id="proposalGif">
+  <p>Wishing you a day filled with love, laughter, and all the happiness in the world! 🥳💖</p>
+  </div>
+
+  <!-- Footer -->
+  <footer>
+    Made with ❤️ by <strong>Harshdeep</strong> | <a href="https://developerharshdeep.github.io/portfolio/" target="_blank">Portfolio</a>
+  </footer>
+
+  <script>
+    const container = document.getElementById("container");
+    const text = "HAPPYBIRTHDAY";
+    const columnWidth = 12; 
+    const columns = Math.floor(window.innerWidth / columnWidth);
+
+    function randomPink() {
+      const pinkShades = ["#ff69b4","#ff1493","#db7093","#ff85a1","#ff007f","#ff66cc","#ffb6c1","#ff4da6","#ff1a75","#e75480"];
+      return pinkShades[Math.floor(Math.random() * pinkShades.length)];
+    }
+
+    for (let i = 0; i < columns; i++) {
+      const col = document.createElement("div");
+      col.classList.add("column");
+      for (let j = 0; j < 25; j++) {
+        for (let char of text) {
+          const span = document.createElement("span");
+          span.textContent = char;
+          span.classList.add("char");
+          span.style.color = randomPink();
+          col.appendChild(span);
+        }
+      }
+      col.style.animationDelay = `${Math.random() * -15}s`;
+      container.appendChild(col);
+    }
+
+    window.addEventListener('resize', () => location.reload());
+
+    // Countdown logic
+    let count = 5;
+    const timerEl = document.getElementById("timer");
+    const proposalContainer = document.getElementById("proposalContainer");
+
+    const countdown = setInterval(() => {
+      count--;
+      timerEl.textContent = count;
+
+      timerEl.style.animation = "none";
+      timerEl.offsetHeight; // force reflow
+      timerEl.style.animation = "numberPop 1s ease forwards";
+
+      if (count === 0) {
+        clearInterval(countdown);
+        setTimeout(() => {
+          timerEl.style.display = "none"; 
+          proposalContainer.classList.add("show");
+        }, 1000);
+      }
+    }, 1000);
+  </script>
+</body>
+</html>
