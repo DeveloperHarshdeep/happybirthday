@@ -11,19 +11,19 @@
       margin: 0;
       padding: 0;
       background: black;
-      overflow: hidden;
-      height: 100vh;
+      min-height: 100vh;
       display: flex;
       justify-content: center;
       align-items: center;
       font-family: 'Poppins', sans-serif;
       color: white;
       position: relative;
+      overflow: hidden;
     }
 
     /* Background Falling Letters */
     .background {
-      position: absolute;
+      position: fixed;
       top: 0;
       left: 0;
       width: 100%;
@@ -39,6 +39,8 @@
       font-size: clamp(10px, 2vw, 16px);
       font-weight: bold;
       animation: fall 8s linear infinite;
+      flex: 1;
+      min-width: 15px; /* prevent shrinking */
     }
 
     .char {
@@ -53,7 +55,7 @@
 
     /* Countdown Timer */
     #timer {
-      position: absolute;
+      position: fixed;
       top: 50%;
       left: 50%;
       transform: translate(-50%, -50%);
@@ -75,13 +77,13 @@
     /* Proposal Container */
     #proposalContainer {
       display: none;
-      position: absolute;
+      position: fixed;
       top: 50%;
       left: 50%;
       transform: translate(-50%, -50%);
       background: rgba(0,0,0,0.85);
       color: white;
-      padding: 30px 20px;
+      padding: 25px 20px;
       border-radius: 20px;
       box-shadow: 0 10px 25px rgba(0,0,0,0.5);
       width: 90%;
@@ -104,7 +106,7 @@
 
     #proposalGif {
       width: 100%;
-      max-height: 200px;
+      max-height: 220px;
       object-fit: contain;
       margin-bottom: 15px;
       border-radius: 15px;
@@ -124,14 +126,18 @@
 
     /* Footer */
     footer {
-      position: absolute;
-      bottom: 10px;
+      position: fixed;
+      bottom: 8px;
+      left: 50%;
+      transform: translateX(-50%);
       width: 100%;
       text-align: center;
-      font-size: 0.9em;
+      font-size: clamp(0.7em, 2vw, 0.9em);
       color: #ff69b4;
       text-shadow: 0 0 5px #ff1493, 0 0 10px #ff69b4;
       z-index: 15;
+      padding: 0 10px;
+      box-sizing: border-box;
     }
 
     footer a {
@@ -154,9 +160,9 @@
 
   <!-- Proposal Container -->
   <div id="proposalContainer">
-<h1>🎉 Happy Birthday! 🎉</h1>
-  <img src="hb.gif" alt="Birthday GIF" id="proposalGif">
-  <p>Wishing you a day filled with love, laughter, and all the happiness in the world! 🥳💖</p>
+    <h1>🎉 Happy Birthday! 🎉</h1>
+    <img src="hb.gif" alt="Birthday GIF" id="proposalGif">
+    <p>Wishing you a day filled with love, laughter, and all the happiness in the world! 🥳💖</p>
   </div>
 
   <!-- Footer -->
@@ -167,18 +173,19 @@
   <script>
     const container = document.getElementById("container");
     const text = "HAPPYBIRTHDAY";
-    const columnWidth = 12; 
-    const columns = Math.floor(window.innerWidth / columnWidth);
+    const columnWidth = 20; 
+    const columns = Math.ceil(window.innerWidth / columnWidth);
 
     function randomPink() {
       const pinkShades = ["#ff69b4","#ff1493","#db7093","#ff85a1","#ff007f","#ff66cc","#ffb6c1","#ff4da6","#ff1a75","#e75480"];
       return pinkShades[Math.floor(Math.random() * pinkShades.length)];
     }
 
+    // Generate background columns
     for (let i = 0; i < columns; i++) {
       const col = document.createElement("div");
       col.classList.add("column");
-      for (let j = 0; j < 25; j++) {
+      for (let j = 0; j < 30; j++) {
         for (let char of text) {
           const span = document.createElement("span");
           span.textContent = char;
@@ -202,8 +209,9 @@
       count--;
       timerEl.textContent = count;
 
+      // Restart animation each tick
       timerEl.style.animation = "none";
-      timerEl.offsetHeight; // force reflow
+      timerEl.offsetHeight; 
       timerEl.style.animation = "numberPop 1s ease forwards";
 
       if (count === 0) {
